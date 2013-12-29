@@ -4,15 +4,13 @@ using System.Collections;
 public class Camera : MonoBehaviour {
 	private Vector3 previousMousePosition;
 	private bool MMDown = false;
-	private GameObject camera;
+	public GameObject camera;
 	public GameObject groundPlane;
 	private float cameraHeight = 15;
 	// Use this for initialization
 	void Start () {
 		// Load config values
 		previousMousePosition = new Vector3 ();
-		camera = GameObject.Find ("Tripod");
-		groundPlane = GameObject.Find ("Plane");
 	}
 	
 	// Update is called once per frame
@@ -53,22 +51,37 @@ public class Camera : MonoBehaviour {
 			MMDown = false;
 		}
 
+		// Move camera with 
+		if (Input.GetAxis ("CameraLeft") == 1) {
+			camera.transform.Translate (new Vector3 (-0.25f, 0, 0));
+		}
+		if (Input.GetAxis ("CameraRight") == 1) {
+			camera.transform.Translate (new Vector3 (0.25f, 0, 0));
+		}
+		if (Input.GetAxis ("CameraUp") == 1) {
+			camera.transform.Translate (new Vector3 (0, 0, 0.25f));
+		}
+		if (Input.GetAxis ("CameraDown") == 1) {
+			camera.transform.Translate (new Vector3 (0, 0, -0.25f));
+		}
+
 		// Check if middle mouse is pressed and mouse is inside game screen
 		if (!MMDown && IsMouseOnScreen()) {
+			// Move camera when touching the edges of the screen
 			if (position.x <= 10 && position.x >= 0) {
-					camera.transform.Translate (new Vector3 (-0.25f, 0, 0));
+				camera.transform.Translate (new Vector3 (-0.25f, 0, 0));
 			}
 
 			if (position.x >= Screen.width - 10 && position.x <= Screen.width) {
-					camera.transform.Translate (new Vector3 (0.25f, 0, 0));
+				camera.transform.Translate (new Vector3 (0.25f, 0, 0));
 			}
 
 			if (position.y <= 10 && position.y >= 0) {
-					camera.transform.Translate (new Vector3 (0, 0, -0.25f));
+				camera.transform.Translate (new Vector3 (0, 0, -0.25f));
 			}
 
 			if (position.y >= Screen.height - 10 && position.y <= Screen.height) {
-					camera.transform.Translate (new Vector3 (0, 0, 0.25f));
+				camera.transform.Translate (new Vector3 (0, 0, 0.25f));
 			}
 		}
 		if (Input.GetAxis ("MouseScrollWheel") != 0) {
